@@ -1,0 +1,91 @@
+---
+title: "ChekhovPlays"
+author: "Miranda Lupion"
+date: "4/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, error = FALSE, message = FALSE, warning = FALSE)
+
+# Load libraries
+library(tidyverse)
+library(ggplot2)
+library(readr)
+library(stringr)
+library(scales)
+library(knitr)
+library(kableExtra)
+library(ggrepel)
+```
+
+```{r data load}
+
+# Load data
+
+counts_real <- read_csv("counts_real_places.csv")
+
+```
+
+
+```{r all plays}
+
+# Summarize data across the four plays
+
+counts_total <- counts_real %>%
+  group_by(object) %>%
+  summarise(total = sum(mentions)) %>%
+  ungroup() 
+
+# Reorder
+
+counts_total <-counts_total[order(counts_total$total), ] 
+counts_total$object <- factor(counts_total$object, levels = counts_total$object)
+
+# Graph
+
+counts_total %>%
+  ggplot(aes(x = reorder(object, -total), y = total, label = total)) +
+  geom_segment(aes(x = object, 
+                   xend = object,
+                   y = 0,
+                   yend = total),
+               color = "skyblue",
+               size = .75) +
+  geom_point(color = "blue") + 
+  geom_label_repel(data = subset(counts_total, total > 9),
+                   segment.size  = 0.2,
+                   segment.color = "grey50",
+                   nudge_y       = 5,
+                  # direction     = "x",
+                   hjust = 1) + 
+  labs(title = "Mentions of Real Places Across the Four Plays") + 
+  xlab("Place") +
+  ylab("Counts") +
+  theme_light() +
+  ylim(0,55) +
+  coord_flip() +
+  theme(
+    panel.grid.major.y = element_blank(),
+    panel.border = element_blank(),
+    axis.ticks.y = element_blank()) 
+
+```
+
+
+```{r Vanya}
+#Uncle Vanya 
+
+counts_real %>%
+  filter(play == "Uncle Vanya") %>%
+  ggplot(aes(object, mentions)) + 
+  geom_point(color = "navy", fill = "light blue") + 
+  xlab("Place") +
+  ylab("Counts") + 
+  facet_wrap(~act) + 
+  coord_flip() + 
+  labs(title = "Uncle Vanya, Mentions of Real Places") 
+  
+
+```
+
