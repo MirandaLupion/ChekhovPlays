@@ -23,7 +23,13 @@ library(ggrepel)
 
 # Load data
 
-counts_real <- read_csv("counts_real_places.csv")
+counts_real <- read_csv("counts_real_places.csv") %>%
+  mutate(period = case_when(
+    act == "Act I" ~ 1,
+    act == "Act II" ~ 2,
+    act == "Act III" ~ 3,
+    act == "Act IV" ~ 4
+  ))
 
 ```
 
@@ -50,9 +56,11 @@ counts_total %>%
                    xend = object,
                    y = 0,
                    yend = total),
-               color = "skyblue",
-               size = .75) +
-  geom_point(color = "blue") + 
+                   color = ifelse(counts_total$object %in% 
+                                c("Moscow","Kharkov", "Paris"), "darkgreen", "skyblue"),
+                   size = .75) +
+  geom_point(color = ifelse(counts_total$object %in% 
+                              c("Moscow","Kharkov", "Paris"), "darkgreen", "blue")) + 
   geom_label_repel(data = subset(counts_total, total > 9),
                    segment.size  = 0.2,
                    segment.color = "grey50",
@@ -73,18 +81,56 @@ counts_total %>%
 ```
 
 
-```{r Vanya}
+```{r Vanya counts total}
 #Uncle Vanya 
 
-counts_real %>%
+counts_real_vanya<- counts_real %>%
   filter(play == "Uncle Vanya") %>%
-  ggplot(aes(object, mentions)) + 
-  geom_point(color = "navy", fill = "light blue") + 
+  group_by(object) %>%
+  summarize(total = sum(mentions)) %>%
+  ungroup()
+
+# Reorder
+
+counts_real_vanya <-counts_real_vanya[order(counts_real_vanya$total), ] 
+counts_real_vanya$object <- factor(counts_real_vanya$object, levels = counts_real_vanya$object)
+
+counts_real_vanya %>%
+  ggplot(aes(x = reorder(object, -total), y = total)) + 
+  geom_segment(aes(x = object, 
+                   xend = object,
+                   y = 0,
+                   yend = total),
+               color = "lightblue",
+               size = 2) +
+  geom_point(color = "blue", size = 4) + 
   xlab("Place") +
   ylab("Counts") + 
-  facet_wrap(~act) + 
+  labs(title = "Uncle Vanya, Mentions of Real Places") +
+  ylim(0,4) +
+  theme_light() +
   coord_flip() + 
-  labs(title = "Uncle Vanya, Mentions of Real Places") 
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.ticks.y = element_blank())
+  
+
+```
+```{r Vanya counts by act}
+
+crv<- counts_real %>%
+  filter(play == "Uncle Vanya") %>%
+  select(-period, -play) %>%
+  spread(act, mentions) 
+
+crv[is.na(crv)] <- 0
+
+crv %>%  
+kable(col.names = 
+          c("Place", "Act I", "Act II", "Act III", "Act IV"),
+        caption = "Place Mentions by Act, Uncle Vanya") %>%
+  kable_styling(bootstrap_options = "striped")
   
 
 ```
