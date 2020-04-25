@@ -101,9 +101,9 @@ counts_real_vanya %>%
                    xend = object,
                    y = 0,
                    yend = total),
-               color = "lightblue",
+               color = "orange",
                size = 2) +
-  geom_point(color = "blue", size = 4) + 
+  geom_point(color = "orange", size = 4) + 
   xlab("Place") +
   ylab("Counts") + 
   labs(title = "Uncle Vanya, Mentions of Real Places") +
@@ -117,6 +117,124 @@ counts_real_vanya %>%
   
 
 ```
+```{r Seagull counts total}
+
+#Seagull
+
+counts_real_gull<- counts_real %>%
+  filter(play == "The Seagull") %>%
+  group_by(object) %>%
+  summarize(total = sum(mentions)) %>%
+  ungroup()
+
+# Reorder
+
+counts_real_gull <-counts_real_gull[order(counts_real_gull$total), ] 
+counts_real_gull$object <- factor(counts_real_gull$object, levels = counts_real_gull$object)
+
+counts_real_gull %>%
+  ggplot(aes(x = reorder(object, -total), y = total)) + 
+  geom_segment(aes(x = object, 
+                   xend = object,
+                   y = 0,
+                   yend = total),
+               color = "navy",
+               size = 2) +
+  geom_point(color = "navy", size = 4) + 
+  xlab("Place") +
+  ylab("Counts") + 
+  labs(title = "The Seagull, Mentions of Real Places") +
+  #ylim(0,4) +
+  theme_light() +
+  coord_flip() + 
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.ticks.y = element_blank())
+
+```
+
+```{r Three Sisters counts total}
+
+#Sisters
+
+counts_real_sis<- counts_real %>%
+  filter(play == "Three Sisters") %>%
+  group_by(object) %>%
+  summarize(total = sum(mentions)) %>%
+  ungroup()
+
+# Reorder
+
+counts_real_sis <-counts_real_sis[order(counts_real_sis$total), ] 
+counts_real_sis$object <- factor(counts_real_sis$object, levels = counts_real_sis$object)
+
+counts_real_sis %>%
+  ggplot(aes(x = reorder(object, -total), y = total)) + 
+  geom_segment(aes(x = object, 
+                   xend = object,
+                   y = 0,
+                   yend = total),
+               color = "pink",
+               size = 2) +
+  geom_point(color = "pink", size = 4) + 
+  xlab("Place") +
+  ylab("Counts") + 
+  labs(title = "Three Sisters, Mentions of Real Places") +
+  #ylim(0,4) +
+  theme_light() +
+  coord_flip() + 
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.ticks.y = element_blank())
+
+```
+
+
+```{r Cherry Orchard counts}
+
+#Cherry Orchard
+
+counts_real_co<- counts_real %>%
+  filter(play == "The Cherry Orchard") %>%
+  group_by(object) %>%
+  summarize(total = sum(mentions)) %>%
+  ungroup()
+
+# Reorder
+
+counts_real_co <-counts_real_co[order(counts_real_co$total), ] 
+counts_real_co$object <- factor(counts_real_co$object, levels = counts_real_co$object)
+
+counts_real_co %>%
+  ggplot(aes(x = reorder(object, -total), y = total)) + 
+  geom_segment(aes(x = object, 
+                   xend = object,
+                   y = 0,
+                   yend = total),
+               color = "brown",
+               size = 2) +
+  geom_point(color = "brown", size = 4) + 
+  xlab("Place") +
+  ylab("Counts") + 
+  labs(title = "The Cherry Orchard, Mentions of Real Places") +
+  #ylim(0,4) +
+  theme_light() +
+  coord_flip() + 
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.ticks.y = element_blank())
+
+```
+
+
+
+
+
+
+
 ```{r Vanya counts by act}
 
 crv<- counts_real %>%
