@@ -117,6 +117,46 @@ counts_real_vanya %>%
   
 
 ```
+
+
+We see, arguably, the most geographic diversity in Uncle Vanya. Only real places mentioned in multiple acts are Kharkov and the District. 
+
+```{r Vanya, change over act }
+
+v_1 <- counts_real %>%
+  filter(play == "Uncle Vanya", act == "Act I") %>%
+  select(-period, -play)
+  
+
+v_2 <- counts_real %>%
+  filter(play == "Uncle Vanya", act == "Act II") %>%
+  select(-period, -play)
+
+v_3 <- counts_real %>% 
+  filter(play == "Uncle Vanya", act == "Act III") %>%
+  select(-period, -play)
+
+v_4 <- counts_real %>%
+  filter(play == "Uncle Vanya", act == "Act IV") %>%
+  select(-period, -play)
+  
+
+rbind(v_1,v_2,v_3,v_4) %>%
+  select(-act) %>%
+  kable(col.names = 
+          c("Place", "Mentions"),
+            caption = "Place Mentions by Act, Uncle Vanya") %>%
+  kable_styling() %>%
+  group_rows("Act I", 1,1) %>%
+  group_rows("Act II", 2, 4) %>%
+  group_rows("Act III", 5,7) %>%
+  group_rows("Act IV", 8,11)
+
+
+
+```
+
+
 ```{r Seagull counts total}
 
 #Seagull
