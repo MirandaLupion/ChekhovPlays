@@ -57,10 +57,10 @@ counts_total %>%
                    y = 0,
                    yend = total),
                    color = ifelse(counts_total$object %in% 
-                                c("Moscow","Kharkov", "Paris"), "darkgreen", "skyblue"),
+                                c("Moscow","Kharkov", "Paris"), "orange", "skyblue"),
                    size = .75) +
   geom_point(color = ifelse(counts_total$object %in% 
-                              c("Moscow","Kharkov", "Paris"), "darkgreen", "blue")) + 
+                              c("Moscow","Kharkov", "Paris"), "orange", "blue")) + 
   geom_label_repel(data = subset(counts_total, total > 9),
                    segment.size  = 0.2,
                    segment.color = "grey50",
@@ -101,9 +101,9 @@ counts_real_vanya %>%
                    xend = object,
                    y = 0,
                    yend = total),
-               color = "orange",
+               color = "darkgreen",
                size = 2) +
-  geom_point(color = "orange", size = 4) + 
+  geom_point(color = "darkgreen", size = 4) + 
   xlab("Place") +
   ylab("Counts") + 
   labs(title = "Uncle Vanya, Mentions of Real Places") +
@@ -146,15 +146,17 @@ rbind(v_1,v_2,v_3,v_4) %>%
   kable(col.names = 
           c("Place", "Mentions"),
             caption = "Place Mentions by Act, Uncle Vanya") %>%
-  kable_styling() %>%
+  kable_styling(bootstrap_options = c("striped", "condensed")) %>%
   group_rows("Act I", 1,1) %>%
   group_rows("Act II", 2, 4) %>%
   group_rows("Act III", 5,7) %>%
   group_rows("Act IV", 8,11)
 
 
+ 
 
 ```
+
 
 
 ```{r Seagull counts total}
@@ -194,6 +196,44 @@ counts_real_gull %>%
 
 ```
 
+The last two acts are especially outward looking with seven unique (for the act) real places mentioned in each act. 
+
+```{r Seagull change over act}
+
+gull_1 <- counts_real %>%
+  filter(play == "The Seagull", act == "Act I") %>%
+  select(-period, -play)
+  
+
+gull_2 <- counts_real %>%
+  filter(play == "The Seagull", act == "Act II") %>%
+  select(-period, -play)
+
+gull_3 <- counts_real %>% 
+  filter(play == "The Seagull", act == "Act III") %>%
+  select(-period, -play)
+
+gull_4 <- counts_real %>%
+  filter(play == "The Seagull", act == "Act IV") %>%
+  select(-period, -play)
+  
+
+rbind(gull_1,gull_2,gull_3,gull_4) %>%
+  select(-act) %>%
+  kable(col.names = 
+          c("Place", "Mentions"),
+            caption = "Place Mentions by Act, The Seagull") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed")) %>%
+  group_rows("Act I", 1,5) %>%
+  group_rows("Act II", 6, 7) %>%
+  group_rows("Act III", 8,14) %>%
+  group_rows("Act IV", 15,21)
+
+```
+
+
+
+
 ```{r Three Sisters counts total}
 
 #Sisters
@@ -230,6 +270,26 @@ counts_real_sis %>%
     axis.ticks.y = element_blank())
 
 ```
+
+Three sisters becomes less and less outward facing throughout the play. 
+
+```{r Three sisters change over act}
+
+
+counts_real %>%
+  filter(play == "Three Sisters") %>%
+  select(-act, -period, -play) %>%
+  kable(col.names = 
+          c("Place", "Mentions"),
+            caption = "Place Mentions by Act, The Seagull") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed")) %>%
+  group_rows("Act I", 1,6) %>%
+  group_rows("Act II", 7, 14) %>%
+  group_rows("Act III", 15,17) %>%
+  group_rows("Act IV", 18,20)
+
+```
+
 
 
 ```{r Cherry Orchard counts}
@@ -270,8 +330,45 @@ counts_real_co %>%
 ```
 
 
+Most inward during party scene (Act III). Otherwise, a very outward play. Most outward acts are I and IV. 
+
+```{r Cherry Orchard change over acts}
+
+counts_real %>%
+  filter(play == "The Cherry Orchard") %>%
+  select(-act, -period, -play) %>%
+  kable(col.names = 
+          c("Place", "Mentions"),
+            caption = "Place Mentions by Act, The Seagull") %>%
+  kable_styling(bootstrap_options = c("striped", "condensed")) %>%
+  group_rows("Act I", 1,7) %>%
+  group_rows("Act II", 8, 12) %>%
+  group_rows("Act III", 13,14) %>%
+  group_rows("Act IV", 15,20)
 
 
+```
 
 
+```{r mentions of real places across acts and plays}
+
+counts_real %>%
+  group_by(period,play) %>%
+  select(-act, -object) %>%
+  summarise(total = sum(mentions)) %>% 
+  ggplot(aes(x = period, y = total, fill = play)) +
+  geom_col() + 
+  facet_wrap(~play, nrow = 1, ncol = 4) + 
+  xlab("Act") +
+  ylab("Total Mentions Real Places") +
+    theme_light() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.border = element_blank(),
+    axis.ticks.y = element_blank()) +
+    scale_fill_manual(values = c("brown", "navy", "pink", "darkgreen"))
+  
+  
+
+```
 
