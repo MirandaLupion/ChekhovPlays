@@ -363,6 +363,7 @@ counts_real %>%
   ylab("Total Mentions Real Places") +
     theme_light() +
   theme(
+    legend.position = "none",
     panel.grid.minor.y = element_blank(),
     panel.border = element_blank(),
     axis.ticks.y = element_blank()) +
