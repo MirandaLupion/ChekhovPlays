@@ -235,21 +235,3 @@ counts_real_co %>%
 
 
 
-```{r Vanya counts by act}
-
-crv<- counts_real %>%
-  filter(play == "Uncle Vanya") %>%
-  select(-period, -play) %>%
-  spread(act, mentions) 
-
-crv[is.na(crv)] <- 0
-
-crv %>%  
-kable(col.names = 
-          c("Place", "Act I", "Act II", "Act III", "Act IV"),
-        caption = "Place Mentions by Act, Uncle Vanya") %>%
-  kable_styling(bootstrap_options = "striped")
-  
-
-```
-
