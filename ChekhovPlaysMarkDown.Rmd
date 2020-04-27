@@ -281,7 +281,7 @@ counts_real %>%
   select(-act, -period, -play) %>%
   kable(col.names = 
           c("Place", "Mentions"),
-            caption = "Place Mentions by Act, The Seagull") %>%
+            caption = "Place Mentions by Act, Three Sisters") %>%
   kable_styling(bootstrap_options = c("striped", "condensed")) %>%
   group_rows("Act I", 1,6) %>%
   group_rows("Act II", 7, 14) %>%
@@ -339,7 +339,7 @@ counts_real %>%
   select(-act, -period, -play) %>%
   kable(col.names = 
           c("Place", "Mentions"),
-            caption = "Place Mentions by Act, The Seagull") %>%
+            caption = "Place Mentions by Act, The Cherry Orchard") %>%
   kable_styling(bootstrap_options = c("striped", "condensed")) %>%
   group_rows("Act I", 1,7) %>%
   group_rows("Act II", 8, 12) %>%
@@ -370,6 +370,18 @@ counts_real %>%
     scale_fill_manual(values = c("brown", "navy", "pink", "darkgreen"))
   
   
+
+```
+
+```{r total mentions}
+
+# counts_real %>%
+#   select(-act, -period) %>%
+#   group_by(object, play) %>%
+#   summarize(mentions_per_play = sum(mentions)) %>% 
+#   spread(play, mentions_per_play) %>%
+#   write.csv("/Users/MLupion/Desktop/Chekhov_Network_2.csv", row.names = FALSE)
+
 
 ```
 
